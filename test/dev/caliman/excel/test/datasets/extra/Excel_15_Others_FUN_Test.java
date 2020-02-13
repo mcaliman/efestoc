@@ -22,7 +22,6 @@
 package dev.caliman.excel.test.datasets.extra;
 
 import dev.caliman.excel.ToolkitCommand;
-import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -31,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class Excel_15_Others_FUN_Test {
 
-    @Test
+    //@Test
     void testTest() throws Exception {
         ToolkitCommand toolkitCommand = new ToolkitCommand("test/15-Others-FUN.xlsx");
         toolkitCommand.execute();

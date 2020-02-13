@@ -25,7 +25,6 @@ package dev.caliman.excel.parser;
 import dev.caliman.excel.grammar.lexicaltokens.CELL;
 import dev.caliman.excel.grammar.lexicaltokens.RANGE;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.SpreadsheetVersion;
 import org.apache.poi.ss.formula.EvaluationCell;
 import org.apache.poi.ss.formula.EvaluationName;
@@ -109,7 +108,7 @@ public abstract class AbstractParser {
     private XSSFEvaluationWorkbook evaluation;
 
 
-    AbstractParser(String filename) throws IOException, InvalidFormatException {
+    AbstractParser(String filename) throws IOException {
         this.filename = filename;
         File file = new File(this.filename);
         this.workbook = WorkbookFactory.create(file);
