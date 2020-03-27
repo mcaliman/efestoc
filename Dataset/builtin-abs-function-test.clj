@@ -3,7 +3,7 @@
 ; Text file: Dataset/builtin-abs-function-test.clj
 ; Excel File: Dataset/builtin-abs-function-test.xlsx
 ; Excel Formulas Number: 2
-; Elapsed Time (parsing + topological sort): 1 s. or 0 min.
+; Elapsed Time (parsing + topological sort): 0 s. or 0 min.
 ;
 ; BEGIN-RAW-TEXT
 ; A1 = a

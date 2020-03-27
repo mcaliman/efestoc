@@ -19,14 +19,18 @@
  * Efesto, alternative license terms are available from Massimo Caliman
  * please direct inquiries about Efesto licensing to mcaliman@gmail.com
  */
-package dev.caliman.excel.grammar.functions.builtin;
+
+package dev.caliman.excel.grammar.functions.builtin.trigo;
 
 import dev.caliman.excel.grammar.lexicaltokens.EXCEL_FUNCTION;
 import dev.caliman.excel.grammar.nonterm.Formula;
 
-public class COS extends EXCEL_FUNCTION {
+/**
+ * @author Massimo Caliman
+ */
+public class ACOS extends EXCEL_FUNCTION {
 
-    public COS(Formula... args) {
+    public ACOS(Formula... args) {
         this.args = args;
     }
 

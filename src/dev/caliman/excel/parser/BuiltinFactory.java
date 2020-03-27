@@ -25,6 +25,7 @@ package dev.caliman.excel.parser;
 import dev.caliman.excel.grammar.functions.builtin.*;
 import dev.caliman.excel.grammar.functions.builtin.logical.*;
 import dev.caliman.excel.grammar.functions.builtin.math.ABS;
+import dev.caliman.excel.grammar.functions.builtin.trigo.*;
 import dev.caliman.excel.grammar.functions.conditionalreferencefunction.CHOOSE;
 import dev.caliman.excel.grammar.functions.conditionalreferencefunction.IF;
 import dev.caliman.excel.grammar.functions.referencefunction.INDEX;
