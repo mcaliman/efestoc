@@ -32,7 +32,7 @@ import java.nio.charset.StandardCharsets;
 
 public class ToolkitCommand {
 
-    private Parser parser;
+    private final Parser parser;
 
     private long elapsed = 0;
 
@@ -82,7 +82,7 @@ public class ToolkitCommand {
             for (Start start : list) {
                 try {
                     //writer.write(start.id() + " = " + start.toString());
-                    writer.write("(def " + start.id() + " " + start.toString() + ")");
+                    writer.write("(def " + start.id() + " " + start + ")");
                 } catch (Exception e) {
                     writer.write("; Error when compile " + start.id());
                 }
@@ -105,7 +105,7 @@ public class ToolkitCommand {
             try {
                 if (start != null)
                     //System.out.println(start.id() + " = " + start.toString());
-                    System.out.println("(def " + start.id() + " " + start.toString() + ")");
+                    System.out.println("(def " + start.id() + " " + start + ")");
             } catch (Exception e) {
                 System.err.println("Error when compile " + start.id());
             }

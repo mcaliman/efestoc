@@ -70,7 +70,7 @@ public abstract class Binary extends FunctionCall {
 
     protected String operandToFormulaParenthesisFormula(ParenthesisFormula operand) {
         return operand.getFormula() instanceof Binary ?
-                "(" + operand.getFormula().toString() + ")" :
+                "(" + operand.getFormula() + ")" :
                 "(" + operand.getFormula().getAddress(false) + ")";
     }
 

@@ -287,7 +287,7 @@ public abstract class AbstractParser {
     }
 
     void parseErrPtg(Ptg t) {
-        err.println(t.getClass().getName() + ": " + t.toString());
+        err.println(t.getClass().getName() + ": " + t);
     }
 
     void parseMissingArguments() {

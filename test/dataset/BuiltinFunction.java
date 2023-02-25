@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BuiltinFunction {
     @Test
-    void testBuiltinLogicalFunction() throws Exception, InvalidFormatException {
+    void testBuiltinLogicalFunction() throws Exception {
         String current = new java.io.File(".").getCanonicalPath();
         System.out.println("Current dir:" + current);
         ToolkitCommand cmd = new ToolkitCommand("Dataset/builtin-logical-function-test.xlsx");

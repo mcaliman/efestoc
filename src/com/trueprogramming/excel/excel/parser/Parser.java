@@ -53,12 +53,12 @@ import static java.lang.System.out;
 public final class Parser extends AbstractParser {
 
     private boolean verbose = true;
-    private StringBuilder raw;
-    private List<Cell> ext;
-    private StartList unordered;
+    private final StringBuilder raw;
+    private final List<Cell> ext;
+    private final StartList unordered;
     private StartList ordered;
-    private StartGraph graph;
-    private Stack<Start> stack;
+    private final StartGraph graph;
+    private final Stack<Start> stack;
 
     public Parser(String filename) throws IOException {
         super(filename);
@@ -84,7 +84,7 @@ public final class Parser extends AbstractParser {
             parseCELLlinked(elem);
             this.ext.remove(cell);
         } else if(!this.ext.contains(cell) && nonEmpty(cell)) {
-            this.raw.append("; " + cellAddress(cell.getRowIndex(), cell.getColumnIndex()) + " = " + cell.toString() + "\n");
+            this.raw.append("; " + cellAddress(cell.getRowIndex(), cell.getColumnIndex()) + " = " + cell + "\n");
         }
     }
 
@@ -406,7 +406,7 @@ public final class Parser extends AbstractParser {
                 Row row = extSheet.getRow(cr.getRow());
                 Cell cell = row.getCell(cr.getCol());
                 this.ext.add(cell);
-                verbose("Loosing!!! reference[ext] " + tSHEET.toString() + "" + cellref);
+                verbose("Loosing!!! reference[ext] " + tSHEET + "" + cellref);
             }
         }
         if(extWorkbookNumber > 0) parseReference(tFILE, cellref);
@@ -432,7 +432,7 @@ public final class Parser extends AbstractParser {
             args.setAsArea();
             unordered.add(args);
         } else {
-            err("Not RangeReference " + args.getClass().getSimpleName() + " " + args.toString());
+            err("Not RangeReference " + args.getClass().getSimpleName() + " " + args);
         }
         var elem = new SUM((Formula) args);
         elem.setColumn(column);

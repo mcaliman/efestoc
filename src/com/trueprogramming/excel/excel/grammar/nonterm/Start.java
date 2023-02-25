@@ -123,7 +123,7 @@ public abstract class Start {
     }
 
     public boolean testToFunctional(String text) {
-        return ("(def " + this.id() + " " + this.toString() + ")").equals(text);
+        return ("(def " + this.id() + " " + this + ")").equals(text);
     }
 
 
