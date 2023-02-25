@@ -22,14 +22,15 @@
 
 package dataset;
 
-import dev.caliman.excel.ToolkitCommand;
+import com.trueprogramming.excel.excel.ToolkitCommand;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BuiltinFunction {
     @Test
-    void testBuiltinLogicalFunction() throws Exception {
+    void testBuiltinLogicalFunction() throws Exception, InvalidFormatException {
         String current = new java.io.File(".").getCanonicalPath();
         System.out.println("Current dir:" + current);
         ToolkitCommand cmd = new ToolkitCommand("Dataset/builtin-logical-function-test.xlsx");
