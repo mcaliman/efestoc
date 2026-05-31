@@ -14,5 +14,5 @@
 ; A6 = 6.0
 ; NamedRange!A8 = SUM(slist)
 ; END-RAW-TEXT
-(def NamedRange_slist [ 1.0 2.0 3.0 4.0 5.0 6.0 ])
+(def NamedRange!slist [ 1.0 2.0 3.0 4.0 5.0 6.0 ])
 (def A8 (reduce + NamedRange!slist))

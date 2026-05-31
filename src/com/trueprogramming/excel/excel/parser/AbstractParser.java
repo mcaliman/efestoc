@@ -24,7 +24,7 @@ package com.trueprogramming.excel.excel.parser;
 
 import com.trueprogramming.excel.excel.grammar.lexicaltokens.CELL;
 import com.trueprogramming.excel.excel.grammar.lexicaltokens.RANGE;
-import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.SpreadsheetVersion;
 import org.apache.poi.ss.formula.EvaluationCell;
 import org.apache.poi.ss.formula.EvaluationName;
@@ -322,7 +322,7 @@ public abstract class AbstractParser {
     }
 
     private boolean isDataType(Cell cell) {
-        return cell.getCellType() == NUMERIC && HSSFDateUtil.isCellDateFormatted(cell);
+return cell.getCellType() == NUMERIC && DateUtil.isCellDateFormatted(cell);
     }
 
     private List<Cell> list(String reference) {
