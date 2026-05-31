@@ -14,9 +14,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <!-- Project compiled with Java 17 (language level) and uses Jakarta EE 9 APIs -->
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
+        <!-- Project compiled with Java 25 (language level) and uses Jakarta EE 9 APIs -->
     </properties>
 
     <dependencies>
@@ -45,7 +45,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
                 <configuration>
-                    <release>17</release>
+                    <release>25</release>
                 </configuration>
             </plugin>
         </plugins>
