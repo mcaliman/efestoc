@@ -21,6 +21,7 @@ Dal punto di vista della configurazione del compilatore e delle dipendenze, il p
 * **Versione Java (Language Level)**: **JDK 15**
   Il codice sorgente fa uso di funzionalità del linguaggio fino a Java 15 (es. *Text Blocks* tramite le triple virgolette `"""`).
 * **JDK di Build / Runtime**: **OpenJDK 19**
+* **Jakarta EE**: **Versione 9** (API compatibili con `jakarta.*`)
   Configurato all'interno dell'IDE (IntelliJ IDEA) come JDK del progetto (`openjdk-19`).
 * **Librerie di Terze Parti (Dipendenze)**:
   * **Apache POI 4.1.1** (`poi-4.1.1`): Utilizzata per la lettura a basso livello dei file Excel `.xlsx` e `.xls`, l'estrazione delle formule e il parsing dei token in formato RPN (Notazione Polacca Inversa).
