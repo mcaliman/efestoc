@@ -42,6 +42,6 @@ package com.trueprogramming.excel.excel.grammar.nonterm;
  *
  * @author Massimo Caliman
  */
-public abstract class Formula extends Start {
+public interface Formula extends Start {
 
 }

@@ -22,37 +22,95 @@
 
 package com.trueprogramming.excel.excel.grammar.lexicaltokens;
 
-import com.trueprogramming.excel.excel.grammar.nonterm.Constant;
-
+import com.trueprogramming.excel.excel.grammar.nonterm.IConstant;
+import com.trueprogramming.excel.excel.grammar.nonterm.Formula;
 
 import java.util.Objects;
 
-
 /**
- *
- * @author Massimo Caliman
+ * Integer lexical token.
  */
-public final class BOOL extends Constant {
+public record INT(Integer value) implements IConstant, Formula {
+    public static INT of(Integer value) {
+        return new INT(value);
+    }
 
-    private final Boolean value;
-
-    public BOOL(Boolean value) {
-        this.value = value;
+    @Override
+    public String toString() {
+        return value.toString();
     }
 
     public boolean isTerminal() {
         return true;
     }
+}
+
+/**
+ * Float lexical token.
+ */
+public record FLOAT(Double value) implements IConstant, Formula {
+    public static FLOAT of(Double value) {
+        return new FLOAT(value);
+    }
 
     @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 37 * hash + Objects.hashCode(this.value);
-        return hash;
+    public String toString() {
+        return value.toString();
+    }
+
+    public boolean isTerminal() {
+        return true;
+    }
+}
+
+/**
+ * Boolean lexical token.
+ */
+package com.trueprogramming.excel.excel.grammar.lexicaltokens;
+
+import com.trueprogramming.excel.excel.grammar.nonterm.IConstant;
+import com.trueprogramming.excel.excel.grammar.nonterm.Formula;
+import java.util.Objects;
+
+/**
+ * Boolean lexical token.
+ */
+public record BOOL(Boolean value) implements IConstant, Formula {
+    public static BOOL of(Boolean value) {
+        return new BOOL(value);
+    }
+
+    @Override
+    public String toString() {
+        return value != null && value ? "Boolean/TRUE" : "Boolean/FALSE";
     }
 
     @Override
     public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        BOOL that = (BOOL) obj;
+        return Objects.equals(this.value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
+    }
+
+    public boolean isTerminal() {
+        return true;
+    }
+}
+
+    public static BOOL of(Boolean value) {
+        return new BOOL(value);
+    }
+
+    @Override
+    public String toString() {
+        return value != null && value ? "Boolean/TRUE" : "Boolean/FALSE";
+    }
         if(this == obj) return true;
         if(obj == null) return false;
         if(getClass() != obj.getClass()) return false;

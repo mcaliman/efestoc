@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.trueprogramming.excel.excel.test.datasets.extra.Excel_12_String_COUNTIF_Test
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.052 s -- in com.trueprogramming.excel.excel.test.datasets.extra.Excel_12_String_COUNTIF_Test

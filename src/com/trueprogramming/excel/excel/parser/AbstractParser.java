@@ -215,8 +215,8 @@ public abstract class AbstractParser {
         this.singleSheet = noOfSheets == 1;
         Stream<Sheet> stream = StreamSupport.stream(this.workbook.spliterator(), false);
         stream.forEach(
-                (sheet) -> {
-                    this.sheet = sheet;
+                s -> {
+                    this.sheet = s;
                     parseRows();
                 }
         );
@@ -364,28 +364,20 @@ public abstract class AbstractParser {
             return cell.getDateCellValue();
         }
 
-        switch (cell.getCellType()) {
-            case STRING -> {
-                return cell.getStringCellValue();
-            }
-            case NUMERIC -> {
-                return cell.getNumericCellValue();
-            }
-            case BOOLEAN -> {
-                return cell.getBooleanCellValue();
-            }
+        return switch (cell.getCellType()) {
+            case STRING -> cell.getStringCellValue();
+            case NUMERIC -> cell.getNumericCellValue();
+            case BOOLEAN -> cell.getBooleanCellValue();
             case FORMULA -> {
                 if (cellToStringEqualsTo(cell, "TRUE")) {
-                    return true; 
-                }else if (cellToStringEqualsTo(cell, "FALSE")) {
-                    return false;
+                    yield true;
+                } else if (cellToStringEqualsTo(cell, "FALSE")) {
+                    yield false;
                 }
-                return cell.toString();
+                yield cell.toString();
             }
-            default -> {
-                return null;
-            }
-        }
+            default -> null;
+        };
     }
 
     private boolean cellToStringEqualsTo(Cell cell, String text) {
