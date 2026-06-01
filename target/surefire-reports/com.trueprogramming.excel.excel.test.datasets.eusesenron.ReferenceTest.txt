@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.trueprogramming.excel.excel.test.datasets.eusesenron.ReferenceTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.070 s -- in com.trueprogramming.excel.excel.test.datasets.eusesenron.ReferenceTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.056 s -- in com.trueprogramming.excel.excel.test.datasets.eusesenron.ReferenceTest
