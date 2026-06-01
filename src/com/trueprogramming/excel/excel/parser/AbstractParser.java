@@ -19,25 +19,11 @@
  * Efesto, alternative license terms are available from Massimo Caliman
  * please direct inquiries about Efesto licensing to mcaliman@gmail.com
  */
-
 package com.trueprogramming.excel.excel.parser;
-
-import com.trueprogramming.excel.excel.grammar.lexicaltokens.CELL;
-import com.trueprogramming.excel.excel.grammar.lexicaltokens.RANGE;
-import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.SpreadsheetVersion;
-import org.apache.poi.ss.formula.EvaluationCell;
-import org.apache.poi.ss.formula.EvaluationName;
-import org.apache.poi.ss.formula.FormulaParseException;
-import org.apache.poi.ss.formula.ptg.*;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.util.AreaReference;
-import org.apache.poi.ss.util.CellReference;
-import org.apache.poi.xssf.usermodel.XSSFEvaluationWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.IOException;
+import static java.lang.System.err;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,9 +33,75 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import static java.lang.System.err;
-import static org.apache.poi.ss.formula.ptg.ErrPtg.*;
-import static org.apache.poi.ss.usermodel.CellType.*;
+import org.apache.poi.ss.SpreadsheetVersion;
+import org.apache.poi.ss.formula.EvaluationCell;
+import org.apache.poi.ss.formula.EvaluationName;
+import org.apache.poi.ss.formula.FormulaParseException;
+import org.apache.poi.ss.formula.ptg.AddPtg;
+import org.apache.poi.ss.formula.ptg.Area3DPxg;
+import org.apache.poi.ss.formula.ptg.AreaErrPtg;
+import org.apache.poi.ss.formula.ptg.AreaPtg;
+import org.apache.poi.ss.formula.ptg.ArrayPtg;
+import org.apache.poi.ss.formula.ptg.AttrPtg;
+import org.apache.poi.ss.formula.ptg.BoolPtg;
+import org.apache.poi.ss.formula.ptg.ConcatPtg;
+import org.apache.poi.ss.formula.ptg.Deleted3DPxg;
+import org.apache.poi.ss.formula.ptg.DeletedArea3DPtg;
+import org.apache.poi.ss.formula.ptg.DeletedRef3DPtg;
+import org.apache.poi.ss.formula.ptg.DividePtg;
+import org.apache.poi.ss.formula.ptg.EqualPtg;
+import org.apache.poi.ss.formula.ptg.ErrPtg;
+import static org.apache.poi.ss.formula.ptg.ErrPtg.DIV_ZERO;
+import static org.apache.poi.ss.formula.ptg.ErrPtg.NAME_INVALID;
+import static org.apache.poi.ss.formula.ptg.ErrPtg.NULL_INTERSECTION;
+import static org.apache.poi.ss.formula.ptg.ErrPtg.NUM_ERROR;
+import static org.apache.poi.ss.formula.ptg.ErrPtg.N_A;
+import static org.apache.poi.ss.formula.ptg.ErrPtg.REF_INVALID;
+import static org.apache.poi.ss.formula.ptg.ErrPtg.VALUE_INVALID;
+import org.apache.poi.ss.formula.ptg.FuncPtg;
+import org.apache.poi.ss.formula.ptg.FuncVarPtg;
+import org.apache.poi.ss.formula.ptg.GreaterEqualPtg;
+import org.apache.poi.ss.formula.ptg.GreaterThanPtg;
+import org.apache.poi.ss.formula.ptg.IntPtg;
+import org.apache.poi.ss.formula.ptg.IntersectionPtg;
+import org.apache.poi.ss.formula.ptg.LessEqualPtg;
+import org.apache.poi.ss.formula.ptg.LessThanPtg;
+import org.apache.poi.ss.formula.ptg.MemErrPtg;
+import org.apache.poi.ss.formula.ptg.MissingArgPtg;
+import org.apache.poi.ss.formula.ptg.MultiplyPtg;
+import org.apache.poi.ss.formula.ptg.NamePtg;
+import org.apache.poi.ss.formula.ptg.NotEqualPtg;
+import org.apache.poi.ss.formula.ptg.NumberPtg;
+import org.apache.poi.ss.formula.ptg.ParenthesisPtg;
+import org.apache.poi.ss.formula.ptg.PercentPtg;
+import org.apache.poi.ss.formula.ptg.PowerPtg;
+import org.apache.poi.ss.formula.ptg.Ptg;
+import org.apache.poi.ss.formula.ptg.Ref3DPxg;
+import org.apache.poi.ss.formula.ptg.RefErrorPtg;
+import org.apache.poi.ss.formula.ptg.RefPtg;
+import org.apache.poi.ss.formula.ptg.StringPtg;
+import org.apache.poi.ss.formula.ptg.SubtractPtg;
+import org.apache.poi.ss.formula.ptg.UnaryMinusPtg;
+import org.apache.poi.ss.formula.ptg.UnaryPlusPtg;
+import org.apache.poi.ss.formula.ptg.UnionPtg;
+import org.apache.poi.ss.formula.ptg.UnknownPtg;
+import org.apache.poi.ss.usermodel.Cell;
+import static org.apache.poi.ss.usermodel.CellType.BOOLEAN;
+import static org.apache.poi.ss.usermodel.CellType.FORMULA;
+import static org.apache.poi.ss.usermodel.CellType.NUMERIC;
+import static org.apache.poi.ss.usermodel.CellType.STRING;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.AreaReference;
+import org.apache.poi.ss.util.CellReference;
+import org.apache.poi.xssf.usermodel.XSSFEvaluationWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import com.trueprogramming.excel.excel.grammar.lexicaltokens.CELL;
+import com.trueprogramming.excel.excel.grammar.lexicaltokens.RANGE;
 
 public abstract class AbstractParser {
 
@@ -107,7 +159,6 @@ public abstract class AbstractParser {
     int row;//Current Formula Row
     private XSSFEvaluationWorkbook evaluation;
 
-
     AbstractParser(String filename) throws IOException {
         this.filename = filename;
         File file = new File(this.filename);
@@ -115,9 +166,9 @@ public abstract class AbstractParser {
     }
 
     public static String cellAddress(final int row, final int column, final String sheetName) {
-        return sheetName != null ?
-                sheetName + "!" + AbstractParser.cellAddress(row, column) :
-                AbstractParser.cellAddress(row, column);
+        return sheetName != null
+                ? sheetName + "!" + AbstractParser.cellAddress(row, column)
+                : AbstractParser.cellAddress(row, column);
 
     }
 
@@ -130,9 +181,11 @@ public abstract class AbstractParser {
         int columnNumber = column + 1;
         StringBuilder string = new StringBuilder(2);
         int colRemain = columnNumber;
-        while(colRemain > 0) {
+        while (colRemain > 0) {
             int thisPart = colRemain % 26;
-            if(thisPart == 0) thisPart = 26;
+            if (thisPart == 0) {
+                thisPart = 26;
+            }
             colRemain = (colRemain - thisPart) / 26;
             char colChar = (char) (thisPart + 64);
             string.insert(0, colChar);
@@ -194,14 +247,23 @@ public abstract class AbstractParser {
 
     String parseErrorText(ErrPtg t) {
         String text;
-        if(t == NULL_INTERSECTION) text = "#NULL!";
-        else if(t == DIV_ZERO) text = "#DIV/0!";
-        else if(t == VALUE_INVALID) text = "#VALUE!";
-        else if(t == REF_INVALID) text = "#REF!";
-        else if(t == NAME_INVALID) text = "#NAME?";
-        else if(t == NUM_ERROR) text = "#NUM!";
-        else if(t == N_A) text = "#N/A";
-        else text = "FIXME!";
+        if (t == NULL_INTERSECTION) {
+            text = "#NULL!"; 
+        }else if (t == DIV_ZERO) {
+            text = "#DIV/0!"; 
+        }else if (t == VALUE_INVALID) {
+            text = "#VALUE!"; 
+        }else if (t == REF_INVALID) {
+            text = "#REF!"; 
+        }else if (t == NAME_INVALID) {
+            text = "#NAME?"; 
+        }else if (t == NUM_ERROR) {
+            text = "#NUM!"; 
+        }else if (t == N_A) {
+            text = "#N/A"; 
+        }else {
+            text = "FIXME!";
+        }
         return text;
     }
 
@@ -213,7 +275,7 @@ public abstract class AbstractParser {
         try {
             EvaluationCell evaluationCell = evaluationSheet.getCell(this.row, this.column);
             ptgs = this.evaluation.getFormulaTokens(evaluationCell);
-        } catch(FormulaParseException e) {
+        } catch (FormulaParseException e) {
             err.println("" + e.getMessage() + name + this.row + this.column);
         }
         return ptgs;
@@ -262,7 +324,7 @@ public abstract class AbstractParser {
     }
 
     boolean isFormula(final Cell cell) {
-        return cell!=null && cell.getCellType()==FORMULA;
+        return cell != null && cell.getCellType() == FORMULA;
         //return cell.getCellFormula()!=null && cell.getCellFormula().trim().length()>0;
     }
 
@@ -295,24 +357,34 @@ public abstract class AbstractParser {
     }
 
     Object parseCellValue(Cell cell) {
-        if(cell == null) return null;
-        if(isDataType(cell)) return cell.getDateCellValue();
+        if (cell == null) {
+            return null;
+        }
+        if (isDataType(cell)) {
+            return cell.getDateCellValue();
+        }
 
-
-
-        switch(cell.getCellType()) {
-            case STRING:
+        switch (cell.getCellType()) {
+            case STRING -> {
                 return cell.getStringCellValue();
-            case NUMERIC:
+            }
+            case NUMERIC -> {
                 return cell.getNumericCellValue();
-            case BOOLEAN:
+            }
+            case BOOLEAN -> {
                 return cell.getBooleanCellValue();
-            case FORMULA:
-                if(cellToStringEqualsTo(cell, "TRUE")) return true;
-                else if(cellToStringEqualsTo(cell, "FALSE")) return false;
+            }
+            case FORMULA -> {
+                if (cellToStringEqualsTo(cell, "TRUE")) {
+                    return true; 
+                }else if (cellToStringEqualsTo(cell, "FALSE")) {
+                    return false;
+                }
                 return cell.toString();
-            default:
+            }
+            default -> {
                 return null;
+            }
         }
     }
 
@@ -322,7 +394,7 @@ public abstract class AbstractParser {
     }
 
     private boolean isDataType(Cell cell) {
-return cell.getCellType() == NUMERIC && DateUtil.isCellDateFormatted(cell);
+        return cell.getCellType() == NUMERIC && DateUtil.isCellDateFormatted(cell);
     }
 
     private List<Cell> list(String reference) {
@@ -345,7 +417,7 @@ return cell.getCellType() == NUMERIC && DateUtil.isCellDateFormatted(cell);
         stream.forEach(
                 referencedCell -> {
                     Row row = getRow(referencedCell);
-                    if(row != null) {
+                    if (row != null) {
                         Cell cell = getCell(row, referencedCell);
                         list.add(cell);
                     }
@@ -372,12 +444,10 @@ return cell.getCellType() == NUMERIC && DateUtil.isCellDateFormatted(cell);
     }
 
     /**
-     * Area3DPxg
-     * Title: XSSF Area 3D Reference (Sheet + Area)
-     * Description: Defined an area in an external or different sheet.
-     * REFERENCE:
-     * This is XSSF only, as it stores the sheet / book references in String form.
-     * The HSSF equivalent using indexes is Area3DPtg
+     * Area3DPxg Title: XSSF Area 3D Reference (Sheet + Area) Description:
+     * Defined an area in an external or different sheet. REFERENCE: This is
+     * XSSF only, as it stores the sheet / book references in String form. The
+     * HSSF equivalent using indexes is Area3DPtg
      * <p>
      * parseSheetPlusArea
      */
