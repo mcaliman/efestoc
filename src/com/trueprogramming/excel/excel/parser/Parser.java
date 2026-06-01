@@ -41,7 +41,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Stack;
-import java.util.stream.Stream;
 
 import static java.lang.System.err;
 import static java.lang.System.out;
@@ -114,51 +113,50 @@ public final class Parser extends AbstractParser {
 
     private void parse(Ptg p) {
         verbose("parse: " + p.getClass().getSimpleName());
-        try(Stream<WhatIf> stream = Stream.of(
-                new WhatIf(p, arrayPtg, (Ptg t) -> parseConstantArray((ArrayPtg) t)),
-                new WhatIf(p, addPtg, (Ptg t) -> parseAdd()),
-                new WhatIf(p, area3DPxg, (Ptg t) -> parsePrefixReferenceItem((Area3DPxg) t)),
-                new WhatIf(p, areaErrPtg, this::parseErrPtg),
-                new WhatIf(p, areaPtg, (Ptg t) -> parseRangeReference((AreaPtg) t)),
-                new WhatIf(p, attrPtg, (Ptg t) -> parseSum((AttrPtg) t)),
-                new WhatIf(p, boolPtg, t -> parseBOOL(((BoolPtg) t).getValue())),
-                new WhatIf(p, concatPtg, t -> parseConcat()),
-                new WhatIf(p, deleted3DPxg, this::parseErrPtg),
-                new WhatIf(p, deletedArea3DPtg, this::parseErrPtg),
-                new WhatIf(p, deletedRef3DPtg, this::parseErrPtg),
-                new WhatIf(p, dividePtg, t -> parseDiv()),
-                new WhatIf(p, equalPtg, t -> parseEq()),
-                new WhatIf(p, errPtg, (Ptg t) -> parseERROR((ErrPtg) t)),
-                new WhatIf(p, funcPtg, (Ptg t) -> parseBuiltinFunction((FuncPtg) t)),
-                new WhatIf(p, funcVarPtg, (Ptg t) -> parseBuiltinFunction((FuncVarPtg) t)),
-                new WhatIf(p, greaterEqualPtg, t -> parseGteq()),
-                new WhatIf(p, greaterThanPtg, t -> parseGt()),
-                new WhatIf(p, intersectionPtg, t -> parseIntersection()),
-                new WhatIf(p, intPtg, t -> parseINT(((IntPtg) t).getValue())),
-                new WhatIf(p, lessEqualPtg, t -> parseLeq()),
-                new WhatIf(p, lessThanPtg, t -> parseLt()),
-                new WhatIf(p, memErrPtg, this::parseErrPtg),
-                new WhatIf(p, missingArgPtg, (Ptg t) -> parseMissingArguments()),
-                new WhatIf(p, multiplyPtg, t -> parseMult()),
-                new WhatIf(p, namePtg, (Ptg t) -> parseNamedRange((NamePtg) t)),
-                new WhatIf(p, notEqualPtg, t -> parseNeq()),
-                new WhatIf(p, numberPtg, t -> parseNUMBER(((NumberPtg) t).getValue())),
-                new WhatIf(p, parenthesisPtg, t -> parseParenthesisFormula()),
-                new WhatIf(p, percentPtg, t -> percentFormula()),
-                new WhatIf(p, powerPtg, t -> parsePower()),
-                new WhatIf(p, ref3DPxg, (Ptg t) -> parsePrefixReferenceItem((Ref3DPxg) t)),
-                new WhatIf(p, refErrorPtg, (Ptg t) -> parseERRORREF()),
-                new WhatIf(p, refPtg, (Ptg t) -> parseCELL((RefPtg) t)),
-                new WhatIf(p, stringPtg, (Ptg t) -> parseSTRING(((StringPtg) t).getValue())),
-                new WhatIf(p, subtractPtg, t -> parseSub()),
-                new WhatIf(p, unaryMinusPtg, (Ptg t) -> parseMinus()),
-                new WhatIf(p, unaryPlusPtg, (Ptg t) -> parsePlus()),
-                new WhatIf(p, unionPtg, t -> parseUnion()),
-                new WhatIf(p, unknownPtg, this::parseErrPtg)
-        )) {
-            stream.parallel().
-                    filter((WhatIf t) -> t.predicate.test(t.ptg)).
-                    forEach(t -> t.consumer.accept(t.ptg));
+        try {
+            switch (p) {
+                case ArrayPtg t -> parseConstantArray(t);
+                case AddPtg t -> parseAdd();
+                case Area3DPxg t -> parsePrefixReferenceItem(t);
+                case AreaErrPtg t -> parseErrPtg(t);
+                case AreaPtg t -> parseRangeReference(t);
+                case AttrPtg t -> parseSum(t);
+                case BoolPtg t -> parseBOOL(t.getValue());
+                case ConcatPtg t -> parseConcat();
+                case Deleted3DPxg t -> parseErrPtg(t);
+                case DeletedArea3DPtg t -> parseErrPtg(t);
+                case DeletedRef3DPtg t -> parseErrPtg(t);
+                case DividePtg t -> parseDiv();
+                case EqualPtg t -> parseEq();
+                case ErrPtg t -> parseERROR(t);
+                case FuncPtg t -> parseBuiltinFunction(t);
+                case FuncVarPtg t -> parseBuiltinFunction(t);
+                case GreaterEqualPtg t -> parseGteq();
+                case GreaterThanPtg t -> parseGt();
+                case IntersectionPtg t -> parseIntersection();
+                case IntPtg t -> parseINT(t.getValue());
+                case LessEqualPtg t -> parseLeq();
+                case LessThanPtg t -> parseLt();
+                case MemErrPtg t -> parseErrPtg(t);
+                case MissingArgPtg t -> parseMissingArguments();
+                case MultiplyPtg t -> parseMult();
+                case NamePtg t -> parseNamedRange(t);
+                case NotEqualPtg t -> parseNeq();
+                case NumberPtg t -> parseNUMBER(t.getValue());
+                case ParenthesisPtg t -> parseParenthesisFormula();
+                case PercentPtg t -> percentFormula();
+                case PowerPtg t -> parsePower();
+                case Ref3DPxg t -> parsePrefixReferenceItem(t);
+                case RefErrorPtg t -> parseERRORREF();
+                case RefPtg t -> parseCELL(t);
+                case StringPtg t -> parseSTRING(t.getValue());
+                case SubtractPtg t -> parseSub();
+                case UnaryMinusPtg t -> parseMinus();
+                case UnaryPlusPtg t -> parsePlus();
+                case UnionPtg t -> parseUnion();
+                case UnknownPtg t -> parseErrPtg(t);
+                default -> {}
+            }
         } catch(Exception e) {
             err.println("Parse Error: " + p.getClass().getSimpleName() + " Sheet:" + getSheetName() + " row:" + row + " column:" + column + " exception:" + e.getMessage());
             //e.printStackTrace();
@@ -300,13 +298,10 @@ public final class Parser extends AbstractParser {
         String sheetName = this.getSheetName();
         int sheetIndex = 0;
         for(Ptg ptg : ptgs) {
-            if(ptg != null) {
-                if(ptg instanceof Area3DPxg) {
-                    Area3DPxg area3DPxg = (Area3DPxg) ptg;
-                    range = parseRange(area3DPxg.getSheetName(), area3DPxg);
-                    sheetName = area3DPxg.getSheetName();
-                    sheetIndex = getSheetIndex(area3DPxg.getSheetName());
-                }
+            if(ptg instanceof Area3DPxg area3DPxg) {
+                range = parseRange(area3DPxg.getSheetName(), area3DPxg);
+                sheetName = area3DPxg.getSheetName();
+                sheetIndex = getSheetIndex(area3DPxg.getSheetName());
             }
         }
         NamedRange elem = new NamedRange(name, Objects.requireNonNull(range));
